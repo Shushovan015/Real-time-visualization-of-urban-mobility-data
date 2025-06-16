@@ -48,8 +48,8 @@
 ### 1. **Clone the Repository**
 
 ```bash
-git clone <your-repo-url>
-cd <your-repo-folder>
+git clone https://gitlab.rz.uni-bamberg.de/mobi/theses/2025-ma-shushovan-shakya.git
+cd /mobi/theses/2025-ma-shushovan-shakya.git
 ```
 
 ### 2. **Install Dependencies**
@@ -61,6 +61,7 @@ npm run dev
 # npm start
 
 ## 📂 Project Structure
+```bash 
 
 src/
 ├── components/ # React components
@@ -73,6 +74,7 @@ src/
 public/
 └── index.html
 
+```
 
 ---
 
