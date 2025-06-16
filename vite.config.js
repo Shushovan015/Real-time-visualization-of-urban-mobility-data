@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 config();
 
 export default defineConfig({
+  base: '/2025-MA-Shushovan-Shakya/',
   define: {
     "process.env": process.env,
   },
