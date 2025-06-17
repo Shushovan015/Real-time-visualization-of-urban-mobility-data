@@ -3,6 +3,9 @@
 # Ignore all .env.* files like .env.local, .env.production
 .env.*
 
+# Ignore specific markdown files
+thesis.md
+
 # Logs
 logs
 *.log
