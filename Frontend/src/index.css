@@ -1,0 +1,51 @@
+src/index.css
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Container: flex layout */
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  min-height: 100vh;
+}
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row;
+  }
+}
+
+/* Sidebar styles */
+
+@media (min-width: 768px) {
+  .sidebar {
+    width: 250px;
+    height: 100vh;
+    margin-left: 0;
+  }
+  /* Collapsed state shifts sidebar off-screen */
+  .sidebar-collapsed .sidebar {
+    margin-left: -250px;
+  }
+}
+
+/* Flip arrow when collapsed */
+
+/* Main content styles */
+.main {
+  flex: 1;
+}
+.main h1 {
+  font-size: 1.5rem;
+}

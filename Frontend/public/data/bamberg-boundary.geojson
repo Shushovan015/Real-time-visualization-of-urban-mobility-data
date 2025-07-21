@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bamberg Rectangle"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [10.8683, 49.8728],
+          [10.9473, 49.8728],
+          [10.9473, 49.9378],
+          [10.8683, 49.9378],
+          [10.8683, 49.8728]
+        ]]
+      }
+    }
+  ]
+}

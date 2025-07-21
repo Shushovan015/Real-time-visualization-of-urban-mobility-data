@@ -1,0 +1,126 @@
+/* Toggle button inside sidebar */
+.map-toggle-btn {
+  position: absolute;
+  top: 80px; /* adjust to align above zoom */
+  left: 16px; /* adjust relative to wrapper */
+  width: 32px;
+  height: 32px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-collapsed .toggle-btn {
+  transform: rotate(180deg);
+}
+
+.map-container {
+  flex: 1; /* fill remaining space */
+  position: relative; /* allow .map-inner to size relative to it */
+  width: 100%;
+  height: 100%;
+}
+
+.map-inner {
+  width: 100%;
+  height: 100%;
+}
+
+.map-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/* Position default zoom control below the toggle */
+.ol-zoom.ol-control {
+  position: absolute !important;
+  top: calc(1em + 32px + 0.5em) !important;
+  left: 1em !important;
+  z-index: 999 !important;
+}
+
+/* Ensure toggle control is clickable */
+.ol-toggle-control {
+  pointer-events: auto !important;
+  z-index: 1000 !important;
+}
+
+/* Ensure toggle button receives clicks */
+.ol-toggle-btn {
+  pointer-events: auto !important;
+}
+
+/* .layer-switcher {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  z-index: 1000;
+  font-family: sans-serif;
+}
+
+.layer-switcher-toggle {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 0.5em;
+  cursor: pointer;
+}
+
+.layer-switcher-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.25em 0;
+  background: white;
+} */
+
+.layer-switcher {
+  top: auto !important;
+  right: auto !important;
+  bottom: 1em;
+  left: 1em;
+  z-index: 1000 !important;
+}
+
+/* Match toggle button style */
+.layer-switcher button {
+  width: 32px !important;
+  height: 32px !important;
+  border: none !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.layer-switcher.shown {
+  max-height: 300px;
+  width: 250px;
+}
+
+.ol-scale-line {
+  left: auto !important;
+  right: 10px !important;
+  bottom: 10px !important;
+  font-size: 16px !important;
+  font-weight: bold;
+}
+
+.ol-scale-line-inner {
+  height: 16px !important;
+  line-height: 16px !important;
+  font-size: 16px !important;
+  font-weight: bold;
+}
