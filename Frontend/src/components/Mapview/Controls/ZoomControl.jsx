@@ -12,5 +12,5 @@ export default function ZoomControl() {
     return () => map.removeControl(ctrl);
   }, [map]);
 
-  return null; // it’s purely imperative
+  return null; 
 }

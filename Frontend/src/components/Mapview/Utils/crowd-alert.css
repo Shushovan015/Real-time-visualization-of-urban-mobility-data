@@ -1,0 +1,110 @@
+:root {
+  --toast-bg: #b42318;          
+  --toast-bg-grad: #dc2626;    
+  --toast-fg: #ffffff;
+  --toast-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  --toast-radius: 14px;
+  --toast-gap: 12px;
+  --toast-padY: 10px;
+  --toast-padX: 14px;
+  --toast-width: 360px;         
+  --toast-z: 2147483000;        
+  --toast-progress: #ffffff;
+}
+
+.crowdToast__container {
+  position: fixed;
+  inset: 12px 12px auto auto;   
+  display: flex;
+  flex-direction: column;
+  gap: var(--toast-gap);
+  z-index: var(--toast-z);
+  max-width: var(--toast-width);
+  pointer-events: none; 
+}
+
+.crowdToast {
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(180deg, var(--toast-bg-grad), var(--toast-bg));
+  color: var(--toast-fg);
+  box-shadow: var(--toast-shadow);
+  border-radius: var(--toast-radius);
+  padding: var(--toast-padY) var(--toast-padX);
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.crowdToast__icon { font-size: 20px; line-height: 1; }
+
+.crowdToast__content { min-width: 0; }
+.crowdToast__title {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.2;
+}
+.crowdToast__desc {
+  font-size: 13px;
+  opacity: 0.95;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.crowdToast__close {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--toast-fg);
+  font-size: 18px;
+  line-height: 1;
+  padding: 2px 6px;
+  margin-left: 4px;
+  cursor: pointer;
+  opacity: 0.9;
+}
+.crowdToast__close:hover { opacity: 1; }
+
+.crowdToast__progress {
+  grid-column: 1 / -1;
+  height: 3px;
+  margin-top: 8px;
+  background: rgba(255,255,255,0.3);
+  position: relative;
+  overflow: hidden;
+}
+.crowdToast__progress::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--toast-progress);
+  transform-origin: left;
+  transform: scaleX(calc(1 - var(--crowdToastProgress, 0)));
+  transition: transform 200ms linear;
+}
+
+@media (max-width: 640px) {
+  .crowdToast__container {
+    inset: auto 12px 12px 12px; 
+    max-width: none;
+  }
+  .crowdToast {
+    grid-template-columns: 28px 1fr 28px;
+    padding: 12px 14px;
+    border-radius: 16px;
+  }
+  .crowdToast__title { font-size: 16px; }
+  .crowdToast__desc { font-size: 14px; }
+  .crowdToast__close { font-size: 20px; padding: 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crowdToast,
+  .crowdToast__progress::before {
+    transition: none;
+  }
+}

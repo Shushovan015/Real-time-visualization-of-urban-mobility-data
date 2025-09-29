@@ -5,52 +5,74 @@ export const { Types, Creators } = createActions({
   getPublicDataSuccess: ["payload"],
   getPublicDataFailure: null,
 
-  getVisitorDataARequest: ["id", "params"],
-  getVisitorDataASuccess: ["payload"],
-  getVisitorDataAFailure: null,
+  getPlacesDataRequest: ["params"],
+  getPlacesDataSuccess: ["payload"],
+  getPlacesDataFailure: null,
 
-  getAreaVisitorsDataRequest: ["id", "params"],
-  getAreaVisitorsDataSuccess: ["payload"],
-  getAreaVisitorsDataFailure: null,
+  getAllHourlyHistoryDataRequest: ["params"],
+  getAllHourlyHistoryDataSuccess: ["payload"],
+  getAllHourlyHistoryDataFailure: null,
 
-  getDurationsDataRequest: ["id", "params"],
-  getDurationsDataSuccess: ["payload"],
-  getDurationsDataFailure: null,
+  getPastDataRequest: ["params"],
+  getPastDataSuccess: ["payload"],
+  getPastDataFailure: null,
 
-  getAreaDurationsDataRequest: ["id", "params"],
-  getAreaDurationsDataSuccess: ["payload"],
-  getAreaDurationsDataFailure: null,
+  getHourlyHistoryDataRequest: ["params"],
+  getHourlyHistoryDataSuccess: ["payload"],
+  getHourlyHistoryDataFailure: null,
 
-  getParentVisitorsDataRequest: ["id", "params"],
-  getParentVisitorsDataSuccess: ["payload"],
-  getParentVisitorsDataFailure: null,
+  getPublicDataPerMinuteRequest: ["params"],
+  getPublicDataPerMinuteSuccess: ["payload"],
+  getPublicDataPerMinuteFailure: null,
 
-  getParentDurationsDataRequest: ["id", "params"],
-  getParentDurationsDataSuccess: ["payload"],
-  getParentDurationsDataFailure: null,
+  getNowNextDataRequest: ["params"],
+  getNowNextDataSuccess: ["payload"],
+  getNowNextDataFailure: null,
 
-  getTrajectoryDataRequest: ["id", "params"],
-  getTrajectoryDataSuccess: ["payload"],
-  getTrajectoryDataFailure: null,
+  storeUserLocation: ["payload"],
 
-  getOptionDataRequest: ["id", "params"],
-  getOptionDataSuccess: ["payload"],
-  getOptionDataFailure: null,
+  // getAreaVisitorsDataRequest: ["id", "params"],
+  // getAreaVisitorsDataSuccess: ["payload"],
+  // getAreaVisitorsDataFailure: null,
 
-  getTransitionsDataRequest: ["id", "params"],
-  getTransitionsDataSuccess: ["payload"],
-  getTransitionsDataFailure: null,
+  // getDurationsDataRequest: ["id", "params"],
+  // getDurationsDataSuccess: ["payload"],
+  // getDurationsDataFailure: null,
 
-  getLocationsRequest: ["params"],
-  getLocationsSuccess: ["payload"],
-  getLocationsFailure: null,
+  // getAreaDurationsDataRequest: ["id", "params"],
+  // getAreaDurationsDataSuccess: ["payload"],
+  // getAreaDurationsDataFailure: null,
 
-  getParentsRequest: ["id", "params"],
-  getParentsSuccess: ["payload"],
-  getParentsFailure: null,
+  // getParentVisitorsDataRequest: ["id", "params"],
+  // getParentVisitorsDataSuccess: ["payload"],
+  // getParentVisitorsDataFailure: null,
 
-  incrementCount: null, // your increment action
-  incrementCountAsync: null, // the async action your saga listens for
+  // getParentDurationsDataRequest: ["id", "params"],
+  // getParentDurationsDataSuccess: ["payload"],
+  // getParentDurationsDataFailure: null,
+
+  // getTrajectoryDataRequest: ["id", "params"],
+  // getTrajectoryDataSuccess: ["payload"],
+  // getTrajectoryDataFailure: null,
+
+  // getOptionDataRequest: ["id", "params"],
+  // getOptionDataSuccess: ["payload"],
+  // getOptionDataFailure: null,
+
+  // getTransitionsDataRequest: ["id", "params"],
+  // getTransitionsDataSuccess: ["payload"],
+  // getTransitionsDataFailure: null,
+
+  // getLocationsRequest: ["params"],
+  // getLocationsSuccess: ["payload"],
+  // getLocationsFailure: null,
+
+  // getParentsRequest: ["id", "params"],
+  // getParentsSuccess: ["payload"],
+  // getParentsFailure: null,
+
+  // incrementCount: null, // your increment action
+  // incrementCountAsync: null, // the async action your saga listens for
 });
 
 export default Creators;

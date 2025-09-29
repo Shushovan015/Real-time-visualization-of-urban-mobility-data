@@ -3,7 +3,7 @@ import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 import homeReducer from "./home";
 import toastReducer from "./toast";
-// import other reducers...
+import loaderReducer from "./loader.reducer";
 
 const persistConfig = {
   key: "root",
@@ -13,7 +13,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   home: homeReducer,
   toast: toastReducer,
-  // other reducers...
+  loader: loaderReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

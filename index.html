@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>POIType Grouper → Flat Object</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  :root { font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial; }
+  body { margin: 24px; }
+  .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  textarea { width:100%; height:160px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  button { padding:10px 14px; cursor:pointer; }
+  .muted{color:#666;font-size:12px}.ok{color:#0a7}.warn{color:#c60}.err{color:#c00}
+</style>
+</head>
+<body>
+<h1>Group GeoJSON by <code>POIType</code> → Flat Object</h1>
+<div class="row">
+  <input id="file" type="file" accept=".json,.geojson,application/geo+json,application/json" />
+  <button id="run">Process</button>
+  <button id="download" disabled>Download</button>
+  <span id="status" class="muted">Choose a file, then Process.</span>
+</div>
+<h3>Log</h3>
+<textarea id="log" readonly></textarea>
+
+<script>
+const $ = id => document.getElementById(id);
+const setStatus = (m,c="muted")=>{const s=$("status");s.textContent=m;s.className=c;};
+const log = (m,c)=>{const t=new Date().toISOString().replace('T',' ').replace('Z','');const ta=$("log");ta.value+=(ta.value?"\n":"")+`[${t}] ${m}`;ta.scrollTop=ta.scrollHeight;if(c)setStatus(m,c);};
+
+function sanitize(txt){
+  let s=txt.replace(/^\uFEFF/,"");
+  s=s.replace(/\/\*[\s\S]*?\*\//g,"").replace(/^\s*\/\/.*$/gm,"");
+  s=s.replace(/,\s*([}\]])/g,"$1");
+  return s.trim();
+}
+function splitTopLevelObjects(s){
+  const out=[];let d=0,st=-1,inStr=false,esc=false;
+  for(let i=0;i<s.length;i++){
+    const c=s[i];
+    if(inStr){ if(!esc && c==='"') inStr=false; esc=!esc && c==='\\'; continue; }
+    if(c==='"'){ inStr=true; esc=false; continue; }
+    if(c==='{'){ if(d===0) st=i; d++; continue; }
+    if(c==='}'){ d--; if(d===0 && st>=0){ out.push(s.slice(st,i+1)); st=-1; } }
+  }
+  return out;
+}
+function parseLenientMulti(txt){
+  const s=sanitize(txt);
+  try{const j=JSON.parse(s);return Array.isArray(j)?j:[j];}catch{}
+  try{const j=JSON.parse(`[${s}]`);return Array.isArray(j)?j:[j];}catch{}
+  const parts=splitTopLevelObjects(s);
+  if(!parts.length) throw new Error("No JSON objects found");
+  const roots=[];
+  for(const p of parts){ try{ roots.push(JSON.parse(p)); }catch{} }
+  if(!roots.length) throw new Error("All chunks failed to parse");
+  return roots;
+}
+
+const isFeature = f => f && f.type==="Feature" && f.geometry;
+function coerceFeature(x){
+  if(isFeature(x)) return {type:"Feature",geometry:x.geometry,properties:{...(x.properties||{})}};
+  if(x && x.geometry) return {type:"Feature",geometry:x.geometry,properties:{...(x.properties||{})}};
+  return null;
+}
+function collectFeatures(root){
+  if(!root||typeof root!=="object") return [];
+  if(root.type==="FeatureCollection" && Array.isArray(root.features)) return root.features.slice();
+  if(root.type==="Feature") return [root];
+  if(Array.isArray(root)) return root.flatMap(collectFeatures);
+  if(root.data) return collectFeatures(root.data);
+  if(root.result) return collectFeatures(root.result);
+  if(root.items) return collectFeatures(root.items);
+  return [];
+}
+function deepFindPOIType(obj){
+  const norm=k=>String(k).replace(/[^a-z0-9]/gi,"").toLowerCase();
+  const seen=new Set(); const stack=[obj]; let hops=0;
+  while(stack.length && hops<4){
+    const cur=stack.pop(); if(!cur||typeof cur!=="object"||seen.has(cur)) {hops++; continue;}
+    seen.add(cur);
+    for(const [k,v] of Object.entries(cur)){ if(norm(k)==="poitype") return v; }
+    if(cur.properties) stack.push(cur.properties);
+    for(const v of Object.values(cur)) if(v&&typeof v==="object") stack.push(v);
+    hops++;
+  }
+  return undefined;
+}
+function getStableId(f){
+  const pid=f?.properties?.["@id"]; if(pid) return String(pid);
+  const id=f?.id; if(id) return String(id);
+  const name=f?.properties?.name||"";
+  return JSON.stringify([f?.geometry?.type,f?.geometry?.coordinates,name]).slice(0,500);
+}
+function keyNorm(s){
+  return String(s).toLowerCase().trim();
+}
+
+function processRoots(roots){
+  const buckets=new Map(); const seen=new Set();
+  for(const r of roots){
+    const rootType = r && r.POIType!=null && String(r.POIType).trim()!=="" ? String(r.POIType).trim() : undefined;
+    const feats=collectFeatures(r);
+    for(const raw of feats){
+      const f=coerceFeature(raw); if(!f) continue;
+      let pt = rootType;
+      if(pt==null){ const found=deepFindPOIType(f); pt=(found==null || String(found).trim()==="") ? "_unknown" : String(found).trim(); }
+      pt = keyNorm(pt); 
+      f.properties = {...(f.properties||{}), POIType: pt};
+      const dupeKey = pt+"::"+getStableId(f);
+      if(seen.has(dupeKey)) continue;
+      seen.add(dupeKey);
+      if(!buckets.has(pt)) buckets.set(pt, []);
+      buckets.get(pt).push(f);
+    }
+  }
+  const flat = {};
+  for(const [k,arr] of buckets.entries()){
+    flat[k] = { type:"FeatureCollection", features: arr };
+  }
+  return flat;
+}
+
+function downloadJSON(obj, name){
+  const blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+let lastOut=null;
+
+$("run").addEventListener("click", async ()=>{
+  $("download").disabled=true; lastOut=null;
+  const file=$("file").files?.[0]; if(!file){ log("No file selected","warn"); return; }
+  log(`Reading ${file.name}`);
+  try{
+    const txt=await file.text();
+    const roots=parseLenientMulti(txt);
+    log(`Parsed ${roots.length} top-level object(s)`,"ok");
+    lastOut=processRoots(roots);
+    const keys=Object.keys(lastOut).sort();
+    log(`Buckets: ${keys.length} → ${keys.slice(0,8).join(", ")}${keys.length>8?"…":""}`,"ok");
+    $("download").disabled=false; setStatus("Ready","ok");
+  }catch(e){ log(`Error: ${e.message}`,"err"); }
+});
+$("download").addEventListener("click", ()=>{
+  if(!lastOut) return;
+  const ts=new Date().toISOString().replace(/[:.]/g,"-");
+  downloadJSON(lastOut, `by_POIType_flat_${ts}.json`);
+  log("Download started");
+});
+document.addEventListener("dragover", e=>e.preventDefault());
+document.addEventListener("drop", e=>{
+  e.preventDefault();
+  if(e.dataTransfer.files && e.dataTransfer.files[0]){
+    $("file").files=e.dataTransfer.files;
+    log(`Selected: ${e.dataTransfer.files[0].name}`);
+  }
+});
+</script>
+</body>
+</html>

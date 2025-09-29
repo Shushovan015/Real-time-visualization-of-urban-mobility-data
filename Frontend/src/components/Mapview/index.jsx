@@ -1,29 +1,90 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import MapContainer from "./MapContainer";
 import BoundaryMaskLayer from "./Layers/BoundaryMaskLayer";
 import ZoomControl from "./Controls/ZoomControl";
-import SidebarToggle from "./Controls/SidebarToggle";
 import Scalebar from "./Controls/Scalebar";
-import CrowdHeatmapLayer from "./Layers/heatmapLayer";
-import MovementLayer from "./Layers/MovementLayer";
-// import BaseLayer from "./Layers/BaseLayer";
-import "./map.css";
+import CrowdLayerSwitcher from "./Layers/CrowdLayerSwitcher";
 import LayerSwitcherControl from "./Controls/LayerSwitcherControl";
 import CrowdAlertPopup from "./Utils/CrowdAlertPopup";
-export default function MapView({ sidebarOpen, toggleSidebar, data }) {
+import ChartPopup from "./Utils/ChartPopup";
+import WeatherStripControl from "./Layers/WeatherStripControl";
+import MapLegend from "./Legend/MapLegend";
+import Slider from "../Slider";
+import SliderToggle from "../Slider/SliderToggle";
+import RecommendationsPanel from "./RecommendationPanel";
+import "./map.css";
+import POILayer from "./Layers/POILayers";
+
+const ALL_CATS = [
+  "park",
+  "church",
+  "toilet",
+  "beergarden",
+  "attraction",
+  "cruise",
+  "museum",
+  "viewpoint",
+  "playground",
+  "squares",
+  "theatre",
+  "castle",
+  "other",
+];
+
+export default function MapView({
+  sidebarOpen,
+  toggleSidebar,
+  data,
+  minutes,
+  onMinutesChange,
+}) {
+  const [hoverInfo, setHoverInfo] = useState(null);
+  const [mode, setMode] = useState("heatmap");
+  const [visibleCats, setVisibleCats] = useState(() => new Set(ALL_CATS));
+
+  const toggleCat = (cat) =>
+    setVisibleCats((prev) => {
+      const next = new Set(prev);
+      next.has(cat) ? next.delete(cat) : next.add(cat);
+      return next;
+    });
+
+  const setAll = (on) => setVisibleCats(on ? new Set(ALL_CATS) : new Set());
+
+  const cats = useMemo(() => ALL_CATS, []);
+  const city = { lat: 49.8926, lon: 10.8879 };
+
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%" }}>
-      <MapContainer center={[10.9, 49.9]} zoom={13.5}>
-        {/* <BaseLayer /> */}
+    <div className="map-root">
+      <MapContainer center={[10.9, 49.9]} zoom={12}>
         <BoundaryMaskLayer url="/data/bamberg-boundary.geojson" />
         <ZoomControl />
         <Scalebar />
-        <SidebarToggle isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
         <LayerSwitcherControl />
-        <CrowdHeatmapLayer data={data.data} />
-        <MovementLayer movement={data.movement} />
+        <CrowdLayerSwitcher
+          data={data?.data}
+          onHover={setHoverInfo}
+          mode={mode}
+          setMode={setMode}
+          poiCats={cats}
+          visibleCats={visibleCats}
+          toggleCat={toggleCat}
+          setAllCats={setAll}
+        />
         <CrowdAlertPopup data={data?.data} />
+        <ChartPopup hoverInfo={hoverInfo} />
+        <MapLegend mode={mode} />
+        <WeatherStripControl lat={city.lat} lon={city.lon} hours={4} />
+        <RecommendationsPanel />
+        <POILayer url="/data/POI.json" visibleCats={visibleCats} />
       </MapContainer>
+
+      {/* Bottom time slider (unchanged) */}
+      {/* <div className="map-slider-wrap">
+        <SliderToggle>
+          <Slider minutes={minutes} onMinutesChange={onMinutesChange} />
+        </SliderToggle>
+      </div> */}
     </div>
   );
 }

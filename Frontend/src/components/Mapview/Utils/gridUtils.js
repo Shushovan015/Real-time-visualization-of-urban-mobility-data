@@ -5,7 +5,7 @@ import { Vector as VectorLayer } from "ol/layer";
 import { Stroke, Style } from "ol/style";
 import * as turf from "@turf/turf";
 
-export function createGridWithinBoundary(boundaryPolygon, spacing = 500) {
+export function createGridWithinBoundary(boundaryPolygon, spacing = 100) {
   const extent = boundaryPolygon.getExtent();
   const features = [];
 

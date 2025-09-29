@@ -1,13 +1,13 @@
 .sidebar {
   width: 260px;
-  background-color: #f5f5f5; /* <-- light grey bg */
-  color: #707070; /* <-- medium grey text */
+  background-color: #f5f5f5; 
+  color: #707070; 
   font-family: sans-serif;
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: auto;
-  position: relative; /* enable absolute children */
+  position: relative;
   border-right: 1px solid #ddd;
   transition: margin-left 0.3s ease;
   box-sizing: border-box;
@@ -17,7 +17,7 @@
 .search-filter {
   display: flex;
   padding: 10px;
-  border-bottom: 1px solid #e0e0e0; /* lighter divider */
+  border-bottom: 1px solid #e0e0e0; 
 }
 
 .search-wrapper {
@@ -30,7 +30,7 @@
   top: 50%;
   left: 12px;
   transform: translateY(-50%);
-  color: #707070; /* icons match text */
+  color: #707070; 
 }
 
 .search-input {
@@ -73,10 +73,9 @@
 
 .tab.active {
   background-color: #ffffff;
-  color: #337ab7; /* keep your blue highlight */
+  color: #337ab7; 
 }
 
-/* Category list */
 .cats {
   list-style: none;
   margin: 0;
@@ -103,7 +102,7 @@
 
 .cat-count {
   font-size: 16px;
-  color: #a0a0a0; /* slightly lighter for counts */
+  color: #a0a0a0; 
 }
 
 /* Items list under each category */

@@ -1,4 +1,3 @@
-// src/Map/Layers/MovementLayer.js
 import { useEffect, useRef, useContext } from "react";
 import { Vector as VectorLayer } from "ol/layer";
 import VectorSource from "ol/source/Vector";
@@ -30,15 +29,9 @@ export default function MovementLayer({ movement }) {
 
       const fromCoord = fromLonLat([from.lon, from.lat]);
       const toCoord = fromLonLat([to.lon, to.lat]);
-      // const thickness = Math.min(Math.max(visitors / 2, 2), 10);
-      // const alpha = Math.min(1, 0.4 + visitors / 100);
-      const thickness = Math.min(Math.max(visitors / 25, 1), 8); // smoother scaling
-      const alpha = Math.min(1, Math.max(0.2, visitors / 320)); // 0.2 to 1 range
+      const thickness = Math.min(Math.max(visitors / 25, 1), 8); 
+      const alpha = Math.min(1, Math.max(0.2, visitors / 320)); 
 
-      // const age = (now - timestamp) / 600000;
-      // const alpha = Math.max(0.25, 1 - age);
-
-      // Main animated line
       const mainLine = new LineString([fromCoord, toCoord]);
       const mainFeature = new Feature({
         geometry: mainLine,
@@ -46,7 +39,6 @@ export default function MovementLayer({ movement }) {
       });
 
       const animatedStroke = new Stroke({
-        // color: `rgba(0, 132, 255, ${alpha})`,
         color: `rgba(0, 76, 255, ${alpha})`,
         width: thickness,
         lineCap: "round",
@@ -56,15 +48,14 @@ export default function MovementLayer({ movement }) {
 
       const style = new Style({ stroke: animatedStroke });
       mainFeature.setStyle(style);
-      mainFeature._dashStroke = animatedStroke; // save for animation
+      mainFeature._dashStroke = animatedStroke; 
       features.push(mainFeature);
 
-      // Arrowheads (length in meters)
       const lineLength = Math.hypot(
         toCoord[0] - fromCoord[0],
         toCoord[1] - fromCoord[1]
       );
-      const arrowLength = Math.min(lineLength * 0.025, 200); // 15% of line length, max 200m
+      const arrowLength = Math.min(lineLength * 0.025, 200); 
 
       const angle = Math.atan2(
         toCoord[1] - fromCoord[1],
@@ -85,7 +76,6 @@ export default function MovementLayer({ movement }) {
 
       const arrowStyle = new Style({
         stroke: new Stroke({
-          // color: `rgba(0, 132, 255, ${alpha})`,
           color: `rgba(0, 76, 255, ${alpha})`,
           width: thickness,
         }),
@@ -101,7 +91,6 @@ export default function MovementLayer({ movement }) {
     map.addLayer(layer);
     layerRef.current = layer;
 
-    // Tooltip
     const tooltipEl = document.createElement("div");
     tooltipEl.className = "tooltip";
     tooltipEl.style.cssText =
@@ -130,7 +119,6 @@ export default function MovementLayer({ movement }) {
       if (!found) tooltipEl.style.display = "none";
     });
 
-    // Animate dashed lines
     let dashOffset = 0;
     const animate = () => {
       dashOffset -= 1;
@@ -144,7 +132,6 @@ export default function MovementLayer({ movement }) {
     };
     animationRef.current = requestAnimationFrame(animate);
 
-    // Cleanup
     return () => {
       if (layerRef.current) map.removeLayer(layerRef.current);
       if (overlayRef.current) map.removeOverlay(overlayRef.current);

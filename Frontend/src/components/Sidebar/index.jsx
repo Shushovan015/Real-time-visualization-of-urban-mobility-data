@@ -71,12 +71,10 @@ export default function Sidebar() {
   const handleChange = (e) => {
     const value = parseInt(e.target.value);
     setMinutesAgo(value);
-    // onTimeChange(value); // Pass to parent to update data
   };
 
   const resetToNow = () => {
     setMinutesAgo(0);
-    // onTimeChange(0);
   };
 
   const toggleCat = (key) => setOpenCats((o) => ({ ...o, [key]: !o[key] }));
@@ -119,7 +117,6 @@ export default function Sidebar() {
         </button>
       </div> */}
 
-      {/* Categories */}
       <ul className="cats">
         {CATEGORIES.map((cat) => (
           <li key={cat.key}>

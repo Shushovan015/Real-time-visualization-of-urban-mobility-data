@@ -1,0 +1,83 @@
+{
+  "amenity": {
+    "library": 4,
+    "museum": 8,
+    "biergarten": 11,
+    "restaurant": 11,
+    "fountain": 8,
+    "place_of_worship": 1,
+    "school": 6,
+    "bank": 10,
+    "fast_food": 11,
+    "pharmacy": 7,
+    "doctors": 7,
+    "pub": 11,
+    "cafe": 9,
+    "theatre": 4,
+    "toilets": 3,
+    "fire_station": 3,
+    "driving_school": 2,
+    "bar": 11,
+    "university": 6,
+    "kindergarten": 4,
+    "dentist": 7,
+    "veterinary": 7,
+    "childcare": 2,
+    "courthouse": 3,
+    "hospital": 7,
+    "college": 6,
+    "townhall": 9,
+    "clinic": 7,
+    "police": 7
+  },
+  "shop": {
+    "supermarket": 10,
+    "mall": 10,
+    "ice_cream": 11,
+    "bicycle_rental": 3,
+    "shopping_mall": 10
+  },
+  "transportation": {
+    "train_station": 11,
+    "station": 9,
+    "fuel": 4,
+    "taxi": 6,
+    "ferry_terminal": 3,
+    "bus_station": 5
+  },
+  "tourism": {
+    "binoculars": 8,
+    "marketplace": 10
+  },
+  "leisure": {
+    "parking": 3,
+    "bbq": 11,
+    "outdoor_seating": 11
+  },
+  "emergency": {
+    "sanitary_dump_station": 8,
+    "waste_disposal": 8
+  },
+  "office": {
+    "financial_advice": 10,
+    "insurance": 10
+  },
+  "misc": {
+    "vending_machine": 10,
+    "post_office": 9,
+    "boat_rental": 6,
+    "community_centre": 9,
+    "cinema": 4,
+    "atm": 10,
+    "hunting_stand": 8,
+    "swingerclub": 11,
+    "kneipp_water_cure": 3,
+    "car_wash": 5,
+    "photo_booth": 10,
+    "social_facility": 9,
+    "casino": 4,
+    "language_school": 2,
+    "prison": 2,
+    "grassland": 8
+  }
+}

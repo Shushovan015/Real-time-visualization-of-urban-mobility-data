@@ -1110,7 +1110,7 @@
             "visitors": 5801
           }
         ],
-        "name": "ZOB",
+        "name": "Zentraler Omnibus-Bahnhof (ZOB)",
         "visitors": 469337
       },
       {
@@ -6671,68 +6671,28 @@
     "start_date": "2024-10-01 06:00:00+02:00"
   },
   "parents": {
-    "An der Universität": [
-      "An der Universität"
-    ],
-    "Auststraße": [
-      "Austraße 2",
-      "Austraße 1"
-    ],
-    "Fischstraße": [
-      "Fischstraße 2",
-      "Fischstraße 1"
-    ],
-    "Fleischstraße": [
-      "Fleischstraße"
-    ],
-    "Franz-Ludwig-Straße": [
-      "Franz-Ludwig-Straße"
-    ],
-    "Grüner Markt": [
-      "Grüner Markt Nord",
-      "Grüner Markt Süd"
-    ],
+    "An der Universität": ["An der Universität"],
+    "Zentraler Omnibus-Bahnhof (ZOB)": ["Zentraler Omnibus-Bahnhof (ZOB)"],
+    "Auststraße": ["Austraße 2", "Austraße 1"],
+    "Fischstraße": ["Fischstraße 2", "Fischstraße 1"],
+    "Fleischstraße": ["Fleischstraße"],
+    "Franz-Ludwig-Straße": ["Franz-Ludwig-Straße"],
+    "Grüner Markt": ["Grüner Markt Nord", "Grüner Markt Süd"],
     "Hauptwachstraße": [
       "Hauptwachstraße 1",
       "Hauptwachstraße  3",
       "Hauptwachstraße 2"
     ],
-    "Heumarkt": [
-      "Heumarkt"
-    ],
-    "Kapuzinerstraße": [
-      "Kapuzinerstraße"
-    ],
-    "Keßlerstraße": [
-      "Keßlerstraße"
-    ],
-    "Kleberstraße": [
-      "Kleberstraße"
-    ],
-    "Lange Straße": [
-      "Lange Straße 2",
-      "Lange Straße 1"
-    ],
-    "Maximiliansplatz": [
-      "Maximiliansplatz Ost",
-      "Maximiliansplatz West"
-    ],
-    "Obere Brücke": [
-      "Obere Brücke"
-    ],
-    "Obstmarkt": [
-      "Obstmarkt"
-    ],
-    "Promenadestraße": [
-      "Promenadestraße"
-    ],
-    "Theatergassen": [
-      "Theatergassen 1",
-      "Theatergassen 2"
-    ],
-    "ZOB": [
-      "ZOB"
-    ]
+    "Heumarkt": ["Heumarkt"],
+    "Kapuzinerstraße": ["Kapuzinerstraße"],
+    "Keßlerstraße": ["Keßlerstraße"],
+    "Kleberstraße": ["Kleberstraße"],
+    "Lange Straße": ["Lange Straße 2", "Lange Straße 1"],
+    "Maximiliansplatz": ["Maximiliansplatz Ost", "Maximiliansplatz West"],
+    "Obere Brücke": ["Obere Brücke"],
+    "Obstmarkt": ["Obstmarkt"],
+    "Promenadestraße": ["Promenadestraße"],
+    "Theatergassen": ["Theatergassen 1", "Theatergassen 2"]
   },
   "locations": [
     {
@@ -7854,7 +7814,7 @@
             "visitors": 5801
           }
         ],
-        "name": "ZOB",
+        "name": "Zentraler Omnibus-Bahnhof (ZOB)",
         "visitors": 469337
       },
       {
@@ -23655,7 +23615,7 @@
         "duration_p75": 51.99,
         "duration_p90": 136.55,
         "duration_p95": 200.27,
-        "name": "ZOB"
+        "name": "Zentraler Omnibus-Bahnhof (ZOB)"
       },
       {
         "avg_time": 43.28,
@@ -39714,7 +39674,7 @@
             "visitors": 5801
           }
         ],
-        "name": "ZOB",
+        "name": "Zentraler Omnibus-Bahnhof (ZOB)",
         "visitors": 469337
       },
       {
@@ -58305,7 +58265,7 @@
             "duration_p95": 99.75
           }
         ],
-        "name": "ZOB"
+        "name": "Zentraler Omnibus-Bahnhof (ZOB)"
       },
       {
         "avg_p25": 2.9,

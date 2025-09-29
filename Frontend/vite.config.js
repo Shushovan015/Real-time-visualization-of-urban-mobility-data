@@ -9,11 +9,21 @@ const __dirname = path.dirname(__filename);
 config();
 
 export default defineConfig({
-  base: '/',
+  base: "/",
   define: {
     "process.env": process.env,
   },
   plugins: [react()],
+  server: {
+    host: '0.0.0.0',
+    proxy: {
+      "/api": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
   resolve: {
     alias: {
       "@Actions": path.resolve(__dirname, "./src/actions"),

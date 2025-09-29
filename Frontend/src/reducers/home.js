@@ -2,70 +2,127 @@ import { createReducer } from "reduxsauce";
 import { Types } from "../actions/home";
 
 const initialState = {
-  count: 0,
   publicData: {},
-  visitorsData: {},
-  areaVisitorsData: {},
-  durationsData: {},
-  areaDurationsData: {},
-  parentVisitorsData: {},
-  parentDurationsData: {},
-  trajectoryData: {},
-  passersbyData: {},
-  optinData: {},
-  transitionsData: {},
-  locations: [],
-  locationAreas: {},
-  parents: {},
-  boundingBoxes: [],
-  locationAreaById: {},
-  dataAvailability: {},
-  transitionsHeatmap: {},
+  allHourlyHistoryData: {},
+  hourlyHistoryData: {},
+  getPerMinuteData: {},
+  pastData: {},
+  placesData: {},
+  historyByPlace: {},
+  preferences: { likesLively: false },
+  userLocation: null,
+  nowNextData:{},
 };
 
+const MAX_POINTS = 12; 
+
 const getPublicDataSuccess = (state, action) => {
+  const data = action?.payload?.data || null;
+  const now = Date.now();
+
+  const next = {
+    ...state,
+    publicData: data,
+    historyByPlace: { ...(state.historyByPlace || {}) }, 
+  };
+
+  const rows = Array.isArray(data?.data) ? data.data : [];
+  for (const r of rows) {
+    const key = String(r.location || r.placeId || r.name || "").toLowerCase();
+    const arr = next.historyByPlace[key] ? [...next.historyByPlace[key]] : [];
+    arr.push({ t: now, visitors: Number(r.visitors) || 0 });
+    if (arr.length > MAX_POINTS) arr.shift();
+    next.historyByPlace[key] = arr;
+  }
+
+  return next;
+};
+
+const getPastDataSuccess = (state, action) => {
   const {
     payload: { data },
   } = action;
-  const latestData = data[data.length - 1];
-  console.log(latestData, "reducer");
   return {
     ...state,
-    publicData: latestData,
+    pastData: data,
+  };
+};
+
+const getPlacesDataSuccess = (state, action) => {
+  const {
+    payload: { data },
+  } = action;
+
+  return {
+    ...state,
+    placesData: data,
+  };
+};
+
+const getPublicDataPerMinuteSuccess = (state, action) => {
+  const {
+    payload: { data },
+  } = action;
+  return {
+    ...state,
+    publicDataPerMinute: data,
+  };
+};
+
+const getAllHourlyHistoryDataSuccess = (state, action) => {
+  const {
+    payload: { data },
+  } = action;
+  return {
+    ...state,
+    allHourlyHistoryData: data,
+  };
+};
+
+const getNowNextDataSuccess = (state, action) => {
+  const {
+    payload: { data },
+  } = action;
+  return {
+    ...state,
+    nowNextData: data,
+  };
+};
+
+const storeUserLocation = (state, action) => {
+  const { payload } = action;
+  return {
+    ...state,
+    userLocation: payload,
   };
 };
 
 const getDataSuccess = (field) => (state, action) => {
-  return {
-    ...state,
-    [field]: action.payload.data,
-  };
-};
+  const rawData = action.payload.data;
 
-const incrementCount = (state = initialState) => {
+  const grouped = {};
+  rawData.forEach((entry) => {
+    const { year, month, day, hour } = entry._id;
+    const dateStr = `${year}-${month}-${day}`;
+    if (!grouped[dateStr]) grouped[dateStr] = [];
+    grouped[dateStr].push({ hour, visitors: entry.visitors });
+  });
+
   return {
     ...state,
-    count: state.count + 1,
+    [field]: Object.entries(grouped), 
   };
 };
 
 const homeReducer = createReducer(initialState, {
   [Types.GET_PUBLIC_DATA_SUCCESS]: getPublicDataSuccess,
-  [Types.GET_VISITOR_DATA_A_SUCCESS]: getDataSuccess("visitorsData"),
-  [Types.GET_AREA_VISITORS_DATA_SUCCESS]: getDataSuccess("areaVisitorsData"),
-  [Types.GET_DURATIONS_DATA_SUCCESS]: getDataSuccess("durationsData"),
-  [Types.GET_AREA_DURATIONS_DATA_SUCCESS]: getDataSuccess("areaDurationsData"),
-  [Types.GET_PARENT_VISITORS_DATA_SUCCESS]:
-    getDataSuccess("parentVisitorsData"),
-  [Types.GET_PARENT_DURATIONS_DATA_SUCCESS]: getDataSuccess(
-    "parentDurationsData"
-  ),
-  [Types.GET_TRAJECTORY_DATA_SUCCESS]: getDataSuccess("trajectoryData"),
-  [Types.GET_OPTION_DATA_SUCCESS]: getDataSuccess("optinData"),
-  [Types.GET_TRANSITIONS_DATA_SUCCESS]: getDataSuccess("transitionsData"),
-  [Types.INCREMENT_COUNT]: incrementCount,
-  [Types.GET_LOCATIONS_SUCCESS]: getDataSuccess("locations"),
-  [Types.GET_PARENTS_SUCCESS]: getDataSuccess("parents"),
+  [Types.GET_PAST_DATA_SUCCESS]: getPastDataSuccess,
+  [Types.GET_PLACES_DATA_SUCCESS]: getPlacesDataSuccess,
+  [Types.GET_NOW_NEXT_DATA_SUCCESS]: getNowNextDataSuccess,
+  [Types.GET_HOURLY_HISTORY_DATA_SUCCESS]: getDataSuccess("hourlyHistoryData"),
+  [Types.GET_ALL_HOURLY_HISTORY_DATA_SUCCESS]: getAllHourlyHistoryDataSuccess,
+  [Types.GET_PUBLIC_DATA_PER_MINUTE_SUCCESS]: getPublicDataPerMinuteSuccess,
+  [Types.STORE_USER_LOCATION]: storeUserLocation,
 });
 
 export default homeReducer;
