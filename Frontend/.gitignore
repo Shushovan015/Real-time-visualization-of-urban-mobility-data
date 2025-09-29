@@ -34,3 +34,4 @@ dist-ssr
 # Ignore public/datab folder
 public/data/
 public/icons/
+/data

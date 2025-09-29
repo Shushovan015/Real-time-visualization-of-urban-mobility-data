@@ -34,3 +34,4 @@ dist-ssr
 # Ignore data folder
 data/
 backups/
+/data
