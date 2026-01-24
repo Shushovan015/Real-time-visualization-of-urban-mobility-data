@@ -87,12 +87,12 @@ export const nowNextRecommendationsSelector = createSelector(
 
     const crowdData = enrichedLive?.data || [];
 
-    const userLoc = userLocation?.lat && userLocation?.lon ? userLocation : defaultLocation;
-      if (!userLoc?.lat || !userLoc?.lon || crowdData.length === 0) {
+    // const userLoc = userLocation?.lat && userLocation?.lon ? userLocation : defaultLocation;
+    const userLoc = { lat: defaultLocation.lat, lon: defaultLocation.lon };
+    if (!userLoc?.lat || !userLoc?.lon || crowdData.length === 0) {
       return [];
     }
 
-    // const userLoc = { lat: userLocation1.lat, lon: userLocation1.lon };
 
     const TOURIST_MIN = 0.4;
     const KIND_DENY = new Set([
@@ -127,7 +127,7 @@ export const nowNextRecommendationsSelector = createSelector(
 
       if (KIND_DENY.has(ki) || KIND_DENY.has(sk)) return false;
       if (KIND_ALLOW.has(ki) || KIND_ALLOW.has(sk)) return true;
-      return false; 
+      return false;
     };
 
     const POP_W = 0.6;

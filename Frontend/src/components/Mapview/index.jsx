@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import MapContainer from "./MapContainer";
 import BoundaryMaskLayer from "./Layers/BoundaryMaskLayer";
 import ZoomControl from "./Controls/ZoomControl";
@@ -40,19 +40,24 @@ export default function MapView({
 }) {
   const [hoverInfo, setHoverInfo] = useState(null);
   const [mode, setMode] = useState("heatmap");
-  const [visibleCats, setVisibleCats] = useState(() => new Set(ALL_CATS));
+  // Start with POIs disabled to reduce initial load lag.
+  const [visibleCats, setVisibleCats] = useState(() => new Set());
 
-  const toggleCat = (cat) =>
+  const toggleCat = useCallback((cat) => {
     setVisibleCats((prev) => {
       const next = new Set(prev);
       next.has(cat) ? next.delete(cat) : next.add(cat);
       return next;
     });
+  }, []);
 
-  const setAll = (on) => setVisibleCats(on ? new Set(ALL_CATS) : new Set());
+  const setAll = useCallback(
+    (on) => setVisibleCats(on ? new Set(ALL_CATS) : new Set()),
+    []
+  );
 
   const cats = useMemo(() => ALL_CATS, []);
-  const city = { lat: 49.8926, lon: 10.8879 };
+  const city = useMemo(() => ({ lat: 49.8926, lon: 10.8879 }), []);
 
   return (
     <div className="map-root">
@@ -76,7 +81,9 @@ export default function MapView({
         <MapLegend mode={mode} />
         <WeatherStripControl lat={city.lat} lon={city.lon} hours={4} />
         <RecommendationsPanel />
-        <POILayer url="/data/POI.json" visibleCats={visibleCats} />
+        {visibleCats.size > 0 ? (
+          <POILayer url="/data/POI.json" visibleCats={visibleCats} />
+        ) : null}
       </MapContainer>
 
       {/* Bottom time slider (unchanged) */}

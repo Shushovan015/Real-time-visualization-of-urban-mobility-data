@@ -1,6 +1,6 @@
 // MapContainer.jsx
 import React, { useRef, useEffect, useState, createContext } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Map from "ol/Map";
 import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
@@ -27,6 +27,15 @@ export default function MapContainer({ children, center, zoom }) {
   const dispatch = useDispatch();
 
   const { coords: userLocation, error: locError } = useUserLocation();
+  const [showLocError, setShowLocError] = useState(false);
+
+  useEffect(() => {
+    if (!locError) return;
+    setShowLocError(true);
+    const t = setTimeout(() => setShowLocError(false), 5000);
+    return () => clearTimeout(t);
+  }, [locError]);
+
   useEffect(() => {
     const mapInstance = new Map({
       target: mapRef.current,
@@ -37,7 +46,10 @@ export default function MapContainer({ children, center, zoom }) {
         minZoom: 12,
       }),
       layers: [
-        new TileLayer({ source: new OSM() }),
+        new TileLayer({
+          source: new OSM(),
+          preload: 1,
+        }),
         ...baseLayers,
         ...overlayLayers,
       ],
@@ -46,6 +58,9 @@ export default function MapContainer({ children, center, zoom }) {
         rotate: false,
         attribution: false,
       }),
+      loadTilesWhileInteracting: true,
+      loadTilesWhileAnimating: true,
+      pixelRatio: 1,
     });
 
     setTimeout(() => mapInstance.updateSize(), 0);
@@ -64,7 +79,7 @@ export default function MapContainer({ children, center, zoom }) {
         style: new Style({
           image: new CircleStyle({
             radius: 7,
-            fill: new Fill({ color: "#2563eb" }), 
+            fill: new Fill({ color: "#2563eb" }),
             stroke: new Stroke({ color: "#ffffff", width: 2 }),
           }),
         }),
@@ -87,7 +102,7 @@ export default function MapContainer({ children, center, zoom }) {
       map._flewToUser = true;
     }
     dispatch(homeActions.storeUserLocation(userLocation));
-  }, [map, userLocation]);
+  }, [map, userLocation, dispatch]);
 
   return (
     <>
@@ -99,7 +114,7 @@ export default function MapContainer({ children, center, zoom }) {
         {children}
       </MapContext.Provider>
 
-      {locError && (
+      {locError && showLocError && (
         <div
           style={{
             position: "absolute",

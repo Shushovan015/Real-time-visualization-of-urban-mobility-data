@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { FaSlidersH } from "react-icons/fa";
 import CrowdHeatmapLayer from "./heatmapLayer";
 import CrowdIconLayer from "./CrowdIconHeatmap";
@@ -31,6 +31,23 @@ export default function CrowdLayerSwitcher({
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const panelRef = useRef(null);
+
+  // Throttle hover updates to avoid rerender storms while panning/zooming.
+  const rafRef = useRef(0);
+  const lastHoverRef = useRef(null);
+  const onHoverRef = useRef(onHover);
+  useEffect(() => {
+    onHoverRef.current = onHover;
+  }, [onHover]);
+
+  const onHoverThrottled = useCallback((info) => {
+    lastHoverRef.current = info;
+    if (rafRef.current) return;
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = 0;
+      if (onHoverRef.current) onHoverRef.current(lastHoverRef.current);
+    });
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -69,7 +86,7 @@ export default function CrowdLayerSwitcher({
                 <div className="sheet-handle" />
                 <div className="sheet-title">Map options</div>
                 <button className="sheet-close" onClick={() => setOpen(false)}>
-                  ✕
+                  x
                 </button>
               </div>
             )}
@@ -149,10 +166,14 @@ export default function CrowdLayerSwitcher({
       </div>
 
       {mode === "heatmap" && (
-        <CrowdHeatmapLayer data={data} onHover={onHover} />
+        <CrowdHeatmapLayer data={data} onHover={onHoverThrottled} />
       )}
-      {mode === "kde" && <KDEHeatmapLayer data={data} onHover={onHover} />}
-      {mode === "icon" && <CrowdIconLayer data={data} onHover={onHover} />}
+      {mode === "kde" && (
+        <KDEHeatmapLayer data={data} onHover={onHoverThrottled} />
+      )}
+      {mode === "icon" && (
+        <CrowdIconLayer data={data} onHover={onHoverThrottled} />
+      )}
     </>
   );
 }
