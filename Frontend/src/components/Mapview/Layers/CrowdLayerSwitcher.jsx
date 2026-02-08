@@ -32,7 +32,6 @@ export default function CrowdLayerSwitcher({
   const [open, setOpen] = useState(false);
   const panelRef = useRef(null);
 
-  // Throttle hover updates to avoid rerender storms while panning/zooming.
   const rafRef = useRef(0);
   const lastHoverRef = useRef(null);
   const onHoverRef = useRef(onHover);

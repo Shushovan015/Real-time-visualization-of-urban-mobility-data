@@ -171,7 +171,6 @@ export default function CrowdIconLayer({ data, onHover }) {
     map.addLayer(vectorLayer);
     layerRef.current = vectorLayer;
 
-    // Hover handler
     pointerKeyRef.current = map.on("pointermove", (e) => {
       let sent = false;
       map.forEachFeatureAtPixel(

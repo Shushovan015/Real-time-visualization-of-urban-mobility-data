@@ -411,7 +411,6 @@ const simulateMovements = (currentClusters, prevSnapshot) => {
   return movements.slice(0, 30);
 };
 
-// ========== Main Real-Time Simulation Function ==========
 async function storeSimulatedData(simulatedTime = new Date()) {
   const currentTime = new Date(simulatedTime);
   currentTime.setSeconds(0, 0);
@@ -425,16 +424,13 @@ async function storeSimulatedData(simulatedTime = new Date()) {
   const dayOfWeek = currentTime.getDay();
   const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
 
-  // Precompute hourly fractions and average durations for each area
   const areaStats = {};
 
   for (const area of crowdData.publicData.areas) {
-    // Aggregate subareas for visitors
     const subAreasVisitors = crowdData.publicData.areas.filter(a =>
       a.name === area.name || a.name.includes(area.name)
     );
 
-    // Aggregate subareas for duration
     const subAreasDuration = crowdData.areaDurationsData.areas.filter(a =>
       a.name.includes(area.name)
     );
@@ -444,7 +440,6 @@ async function storeSimulatedData(simulatedTime = new Date()) {
     const hourlyTotals = Array.from({ length: 24 }, () => []);
     const hourlyDurations = Array.from({ length: 24 }, () => []);
 
-    // Loop through all historical days (all 3 months)
     for (const sub of subAreasVisitors) {
       if (!sub.data || !Array.isArray(sub.data)) continue;
 
@@ -454,11 +449,9 @@ async function storeSimulatedData(simulatedTime = new Date()) {
         const recDate = new Date(rec.date);
         const recDayOfWeek = recDate.getDay();
         const recIsWeekend = recDayOfWeek === 0 || recDayOfWeek === 6;
-        if (recIsWeekend !== isWeekend) continue; // separate weekday/weekend patterns
-
+        if (recIsWeekend !== isWeekend) continue; 
         const visitors = rec.visitors || 0;
 
-        // Find matching duration record safely
         let durationRec = null;
         for (const durSub of subAreasDuration) {
           if (!durSub.data || !Array.isArray(durSub.data)) continue;
@@ -468,9 +461,7 @@ async function storeSimulatedData(simulatedTime = new Date()) {
             break;
           }
         }
-        const avgDuration = durationRec && durationRec.avg_time ? durationRec.avg_time : 30; // fallback
-
-        // Simple hourly distribution assumption: uniform if no finer data
+        const avgDuration = durationRec && durationRec.avg_time ? durationRec.avg_time : 30; 
         for (let h = 0; h < 24; h++) {
           const fraction = 1 / 24;
           hourlyTotals[h].push(visitors * fraction);
@@ -479,18 +470,15 @@ async function storeSimulatedData(simulatedTime = new Date()) {
       }
     }
 
-    // Compute average per hour
     const avgHourlyVisitors = hourlyTotals.map(arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0);
     const avgHourlyDuration = hourlyDurations.map(arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 30);
 
-    // Normalize to fractions for this area
     const sumHourly = avgHourlyVisitors.reduce((a,b)=>a+b,0) || 1;
     const hourlyFractions = avgHourlyVisitors.map(v => v / sumHourly);
 
     areaStats[area.name] = { hourlyFractions, avgHourlyDuration };
   }
 
-  // Now simulate per-minute visitors for current timestamp
   for (const area of crowdData.publicData.areas) {
     const geometry = getPlaceGeometry(area.name);
     if (!geometry) continue;
@@ -499,7 +487,6 @@ async function storeSimulatedData(simulatedTime = new Date()) {
 
     const { hourlyFractions, avgHourlyDuration } = stats;
 
-    // Aggregate daily visitors from all subareas
     const matchingVisitorAreas = crowdData.publicData.areas.filter(a =>
       a.name === area.name || a.name.includes(area.name)
     );
@@ -517,7 +504,6 @@ async function storeSimulatedData(simulatedTime = new Date()) {
     const totalMinutes = 24 * 60;
     const baseVisitors = new Array(totalMinutes).fill(0);
 
-    // Distribute visitors per hour according to hourly fractions
     for (let hour = 0; hour < 24; hour++) {
       const hourStart = hour * 60;
       const visitorsThisHour = Math.floor(dailyVisitors * hourlyFractions[hour]);
@@ -532,7 +518,6 @@ async function storeSimulatedData(simulatedTime = new Date()) {
       }
     }
 
-    // Apply weekend / after-office boosts and random noise
     const enhancedVisitors = baseVisitors.map((count, idx) => {
       const hour = Math.floor(idx / 60);
       const afterOfficeBoost = (hour >= 17 && hour <= 20) ? 1.1 : 1.0;

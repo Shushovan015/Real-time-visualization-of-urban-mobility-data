@@ -167,9 +167,6 @@ export async function wikiPageviews30d(pageTitle) {
 }
 
 
-/**
- * OTM often has broad coverage; we attempt fuzzy name matching by diacritics.
- */
 export async function openTripInfo({ lat, lon, name }) {
   if (!OTM_KEY) return 0;
   if (lat == null || lon == null) return 0;

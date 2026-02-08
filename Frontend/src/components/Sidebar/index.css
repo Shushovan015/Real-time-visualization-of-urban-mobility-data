@@ -13,7 +13,6 @@
   box-sizing: border-box;
 }
 
-/* Search + filter row */
 .search-filter {
   display: flex;
   padding: 10px;
@@ -56,7 +55,6 @@
   color: #707070;
 }
 
-/* Tabs */
 .tabs {
   display: flex;
   border-bottom: 1px solid #e0e0e0;
@@ -105,7 +103,6 @@
   color: #a0a0a0; 
 }
 
-/* Items list under each category */
 .items {
   list-style: none;
   margin: 0;

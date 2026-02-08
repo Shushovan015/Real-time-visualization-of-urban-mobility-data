@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function useUserLocation() {
-  const [coords, setCoords] = useState(null); // { lat, lon }
+  const [coords, setCoords] = useState(null); 
   const [error, setError] = useState(null);
 
   useEffect(() => {

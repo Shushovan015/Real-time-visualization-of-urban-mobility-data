@@ -108,7 +108,6 @@ const Charts = ({ location }) => {
         );
     });
 
-    // Add chart title
     svg
       .append("text")
       .attr("x", width / 2)
@@ -118,7 +117,6 @@ const Charts = ({ location }) => {
       .style("font-weight", "bold")
       .text(`Hourly Visitors at ${location}`);
 
-    // Add legend
     const legend = svg
       .append("g")
       .attr(

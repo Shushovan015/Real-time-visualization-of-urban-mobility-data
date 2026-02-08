@@ -40,7 +40,6 @@ export default function MapView({
 }) {
   const [hoverInfo, setHoverInfo] = useState(null);
   const [mode, setMode] = useState("heatmap");
-  // Start with POIs disabled to reduce initial load lag.
   const [visibleCats, setVisibleCats] = useState(() => new Set());
 
   const toggleCat = useCallback((cat) => {

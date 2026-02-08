@@ -19,7 +19,6 @@ body {
   background: #f8fafc;
 }
 
-/* Map container hooks */
 .map-container {
   position: relative;
   width: 100%;
@@ -63,8 +62,6 @@ body {
   color: #fff !important;
 }
 
-/* Layer switcher */
-/* Base placement */
 .layer-switcher {
   position: absolute !important;
   left: 12px !important;
@@ -74,7 +71,6 @@ body {
   z-index: 1000 !important;
 }
 
-/* Trigger button */
 .layer-switcher > button {
   width: 44px !important;
   height: 44px !important;
@@ -84,10 +80,6 @@ body {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
 }
 
-.layer-switcher.shown {
-}
-
-/* Desktop panel: compact card above slider */
 .layer-switcher.ls-desktop.shown {
   max-height: 320px !important;
   width: 260px !important;
@@ -102,7 +94,6 @@ body {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18) !important;
 }
 
-/* Mobile panel: bottom sheet */
 @media (max-width: 640px) {
   .layer-switcher.ls-mobile {
     left: 12px !important;
@@ -126,7 +117,6 @@ body {
   }
 }
 
-/* Tighter list spacing */
 .layer-switcher .group,
 .layer-switcher .layer {
   padding: 4px 0 !important;
@@ -139,7 +129,6 @@ body {
   font: 500 13px/1.2 ui-sans-serif, system-ui !important;
 }
 
-/* Scale bar */
 .ol-scale-line {
   right: 12px !important;
   bottom: max(12px, env(safe-area-inset-bottom)) !important;
@@ -152,7 +141,6 @@ body {
   line-height: 14px !important;
 }
 
-/* Weather control */
 .crowd-weather-ctrl {
   position: absolute !important;
   top: 12px !important;
@@ -194,7 +182,6 @@ body {
   color: #4b5563;
 }
 
-/* Legend */
 .map-legend {
   position: absolute;
   right: 12px;
@@ -239,7 +226,6 @@ body {
   color: #444;
 }
 
-/* Now & Next */
 .now-next-card {
   position: absolute;
   right: 12px;

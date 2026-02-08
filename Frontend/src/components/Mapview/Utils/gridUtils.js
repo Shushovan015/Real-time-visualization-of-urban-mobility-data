@@ -16,7 +16,6 @@ export function createGridWithinBoundary(boundaryPolygon, spacing = 100) {
       .getCoordinates()[0],
   ]);
 
-  // Vertical lines
   for (let x = extent[0]; x <= extent[2]; x += spacing) {
     const line = new LineString([
       [x, extent[1]],
@@ -32,7 +31,6 @@ export function createGridWithinBoundary(boundaryPolygon, spacing = 100) {
     }
   }
 
-  // Horizontal lines
   for (let y = extent[1]; y <= extent[3]; y += spacing) {
     const line = new LineString([
       [extent[0], y],

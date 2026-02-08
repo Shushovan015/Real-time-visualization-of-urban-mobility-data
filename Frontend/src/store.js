@@ -6,7 +6,6 @@ import rootSaga from './sagas';
 
 const initialState = {};
 
-// Create saga middleware
 const sagaMiddleware = createSagaMiddleware();
 
 const ENV = import.meta.env.NODE_ENV;
