@@ -1,4 +1,3 @@
-// MapContainer.jsx
 import React, { useRef, useEffect, useState, createContext } from "react";
 import { useDispatch } from "react-redux";
 import Map from "ol/Map";
