@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const { VITE_API_TOKEN } = import.meta.env;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/";
 
 export const api = axios.create({
   baseURL: "https://api.ariadne.inc/api/v2",
@@ -12,7 +13,7 @@ export const api = axios.create({
 });
 
 export const api1 = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: API_BASE_URL,
   timeout: 50000,
   headers: {
     Accept: "application/json",
@@ -22,7 +23,6 @@ export const api1 = axios.create({
 
 export const authenticated = (apiInstance) => {
   const token = VITE_API_TOKEN;
-
   const authenticatedInstance = axios.create(apiInstance.defaults);
 
   authenticatedInstance.interceptors.request.use(
@@ -37,14 +37,11 @@ export const authenticated = (apiInstance) => {
       }
       return config;
     },
-    (error) => {
-      return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
   );
 
   return authenticatedInstance;
 };
 
 export const authenticatedApi = authenticated(api);
-
 export default authenticatedApi;

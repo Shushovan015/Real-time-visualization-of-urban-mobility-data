@@ -8,6 +8,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 config();
 
+const proxyTarget =
+  process.env.VITE_BACKEND_PROXY_TARGET || "http://localhost:3000";
+
 export default defineConfig({
   base: "/",
   define: {
@@ -15,10 +18,10 @@ export default defineConfig({
   },
   plugins: [react()],
   server: {
-    host: '0.0.0.0',
+    host: "0.0.0.0",
     proxy: {
       "/api": {
-        target: "http://localhost:3000",
+        target: proxyTarget,
         changeOrigin: true,
         secure: false,
       },

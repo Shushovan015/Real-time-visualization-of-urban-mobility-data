@@ -32,6 +32,8 @@ dist-ssr
 *.sw?
 
 # Ignore data folder
-data/
 backups/
-/data
+data/*
+!data/ariadne_export.json
+!data/grid-places.json
+!data/popularity.json
