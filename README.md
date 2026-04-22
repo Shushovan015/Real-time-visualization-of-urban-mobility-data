@@ -13,7 +13,7 @@ This project solves that by combining simulated/live crowd data, historical tren
 - Inspect movement and trend patterns.
 - Get "now-next" place suggestions nearby.
 
-## Screenshots
+<!-- ## Screenshots
 
 Add project screenshots in `docs/screenshots/` and keep these file names:
 - `home-map.png`
@@ -22,7 +22,7 @@ Add project screenshots in `docs/screenshots/` and keep these file names:
 
 ![Home Map](docs/screenshots/home-map.png)
 ![Crowd Layer](docs/screenshots/crowd-layer.png)
-![Recommendations Panel](docs/screenshots/recommendations-panel.png)
+![Recommendations Panel](docs/screenshots/recommendations-panel.png) -->
 
 ## Tech Stack
 
